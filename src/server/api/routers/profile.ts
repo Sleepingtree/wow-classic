@@ -1,4 +1,3 @@
-import { WowPreferences } from "@prisma/client";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import z from "zod";
 import { ClassPreferenceValidator } from "~/utils/zodValidations";
@@ -16,7 +15,7 @@ export const profileRouter = createTRPCRouter({
   updateWowPreferances: protectedProcedure
     .input(ClassPreferenceValidator)
     .mutation(({ input, ctx }) => {
-      input.classPreferances.forEach((pref) => {
+      return input.classPreferances.forEach((pref) => {
         ctx.db.classPreferences.upsert({
           where: { id: pref.id },
           create: { ...pref },

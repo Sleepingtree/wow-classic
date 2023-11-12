@@ -4,22 +4,14 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import RoleSelect from "~/componets/roleSelect";
+import PushToEdit from "~/componets/pushToEdit";
+import RoleSelect from "~/componets/editProfile/roleSelect";
 import urls from "~/constants/urlConstants";
 
 import { api } from "~/utils/api";
 
 export default function Home() {
   const { data: sessionData } = useSession();
-
-  if (sessionData) {
-    const profile = api.profile.getUserProfile.useQuery({
-      userId: sessionData.user.id,
-    });
-    if (!profile.data?.classPreferences) {
-      redirect(urls.editProfile);
-    }
-  }
 
   return (
     <>
@@ -57,6 +49,7 @@ export default function Home() {
               </div>
             </Link>
           </div>
+          {sessionData ? <PushToEdit session={sessionData} /> : undefined}
           <RoleSelect />
           <div className="flex flex-col items-center gap-2">
             <AuthShowcase sessionData={sessionData} />
