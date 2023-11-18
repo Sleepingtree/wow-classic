@@ -1,30 +1,30 @@
-import { useState } from "react";
 import InputSelect from "../inputSelect";
+import { Role, RoleList } from "~/constants/logicConstants";
 
-export default function RoleSelect() {
-  const [tank, setTank] = useState(false);
-  const [healer, setHealer] = useState(false);
-  const [dps, setDps] = useState(false);
+type Props = {
+  roles: Role[];
+  setRoles: (roles: Role[]) => void;
+};
+
+export default function RoleSelect({ roles, setRoles }: Props) {
+  const handleToggle = (role: Role, value: boolean) => {
+    value
+      ? setRoles([...roles, role])
+      : setRoles(roles.filter((inner) => inner !== role));
+  };
+
   return (
     <div className="flex ">
-      <InputSelect
-        displayText={"Healer"}
-        key={"Healer"}
-        selected={healer}
-        setSelected={setHealer}
-      />
-      <InputSelect
-        displayText={"Tank"}
-        key={"Tank"}
-        selected={tank}
-        setSelected={setTank}
-      />
-      <InputSelect
-        displayText={"DPS"}
-        key={"DPS"}
-        selected={dps}
-        setSelected={setDps}
-      />
+      {RoleList.map((role) => {
+        return (
+          <InputSelect
+            displayText={role}
+            key={role}
+            selected={true}
+            setSelected={(value) => handleToggle(role, value)}
+          />
+        );
+      })}
     </div>
   );
 }

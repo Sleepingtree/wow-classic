@@ -1,4 +1,5 @@
 export const RoleList = ["Tank", "Healer", "DPS"] as const;
+export type Role = (typeof RoleList)[number];
 export const ClassList = [
   "Druid",
   "Hunter",
@@ -10,3 +11,4 @@ export const ClassList = [
   "Warlock",
   "Warrior",
 ] as const;
+export type ClassName = (typeof ClassList)[number];
