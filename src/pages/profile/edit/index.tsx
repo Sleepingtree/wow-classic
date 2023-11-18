@@ -1,3 +1,5 @@
+import { Button } from "flowbite-react";
+import { useSession } from "next-auth/react";
 import { useContext } from "react";
 import ClassRow from "~/componets/editProfile/classRow";
 import {
@@ -6,22 +8,43 @@ import {
 } from "~/componets/editProfile/editProfileContext";
 import PlusSVG from "~/componets/plusSvg";
 import { ClassName, Role } from "~/constants/logicConstants";
+import Home from "~/pages";
+import { api } from "~/utils/api";
 
 export default function EditProfile() {
+  const { data: sessionData } = useSession();
+  if (!sessionData) {
+    return <Home />;
+  }
+
+  const wowPreferances = api.profile.getUserProfile.useQuery(
+    {
+      userId: sessionData.user.id,
+    },
+    { enabled: !!sessionData.user.id },
+  );
   return (
     <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FFF569] to-[#bfcc76]">
       <div className="flex">
         <EditProfileContextProvider>
-          <InnerForm />
+          {wowPreferances.data ? (
+            <InnerForm wowPreferanceId={wowPreferances.data.id} />
+          ) : (
+            ""
+          )}
         </EditProfileContextProvider>
       </div>
     </main>
   );
 }
 
-function InnerForm() {
+function InnerForm({ wowPreferanceId }: { wowPreferanceId: string }) {
+  const updatePreferances = api.profile.updateWowPreferances.useMutation();
+
   const { classPerferances, setClassPerferances } =
     useContext(EditProfileContext);
+
+  console.log(`inner form render ${classPerferances}`);
 
   const updateRolePref = (index: number, roles: Role[]) => {
     const oldItem = classPerferances[index];
@@ -89,7 +112,9 @@ function InnerForm() {
                 setClassName={(className) => updateClassName(index, className)}
                 isLast={index === classPerferances.length - 1}
                 onDeleteClicked={() =>
-                  setClassPerferances(classPerferances.splice(index, 1))
+                  setClassPerferances(
+                    classPerferances.filter((_item, i) => i !== index),
+                  )
                 }
               />
               {index === classPerferances.length - 1 ? plusSvg : undefined}
@@ -97,7 +122,18 @@ function InnerForm() {
           );
         })
       )}
-      <button type="submit" className="h-5 w-5" />
+      <Button
+        onClick={() =>
+          updatePreferances.mutate({
+            classPreferances: classPerferances.map((pref) => ({
+              roles: pref.roles,
+              rank: pref.rank,
+              className: pref.className as ClassName,
+              wowPreferencesId: wowPreferanceId,
+            })),
+          })
+        }
+      />
     </div>
   );
 }

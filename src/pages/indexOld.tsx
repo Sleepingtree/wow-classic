@@ -2,7 +2,6 @@ import { Alert } from "flowbite-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import RoleSelect from "~/componets/editProfile/roleSelect";
 
 import { api } from "~/utils/api";
 
@@ -47,7 +46,6 @@ export default function Home() {
               </div>
             </Link>
           </div>
-          <RoleSelect />
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}

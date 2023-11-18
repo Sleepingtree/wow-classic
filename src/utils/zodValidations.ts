@@ -5,8 +5,8 @@ export const ClassPreferenceValidator = z.object({
   classPreferances: z
     .object({
       id: z.string().cuid().optional(),
-      role: z.enum(RoleList),
-      class: z.enum(ClassList),
+      roles: z.enum(RoleList).array(),
+      className: z.enum(ClassList),
       wowPreferencesId: z.string().cuid(),
       rank: z
         .number()

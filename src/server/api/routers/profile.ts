@@ -1,6 +1,6 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc";
 import z from "zod";
 import { ClassPreferenceValidator } from "~/utils/zodValidations";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const profileRouter = createTRPCRouter({
   getUserProfile: protectedProcedure
@@ -12,6 +12,7 @@ export const profileRouter = createTRPCRouter({
       });
     }),
 
+  //TODO refactor to go off of WowPreferences, based on use
   updateWowPreferances: protectedProcedure
     .input(ClassPreferenceValidator)
     .mutation(({ input, ctx }) => {

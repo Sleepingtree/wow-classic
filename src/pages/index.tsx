@@ -1,12 +1,8 @@
-import { Alert } from "flowbite-react";
 import { Session } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import PushToEdit from "~/componets/pushToEdit";
-import RoleSelect from "~/componets/editProfile/roleSelect";
-import urls from "~/constants/urlConstants";
 
 import { api } from "~/utils/api";
 
@@ -50,7 +46,6 @@ export default function Home() {
             </Link>
           </div>
           {sessionData ? <PushToEdit session={sessionData} /> : undefined}
-          <RoleSelect />
           <div className="flex flex-col items-center gap-2">
             <AuthShowcase sessionData={sessionData} />
           </div>

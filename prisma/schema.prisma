@@ -69,8 +69,8 @@ model WowPreferences {
 
 model ClassPreferences {
     id               String         @id @default(cuid())
-    role             Role
-    class            Class
+    role             Role[]
+    className        Class
     rank             Int
     wowPreferences   WowPreferences @relation(fields: [wowPreferencesId], references: [id])
     wowPreferencesId String

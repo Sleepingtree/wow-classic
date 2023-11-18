@@ -18,7 +18,10 @@ export default function ClassSelect({ className, setClassName, index }: Props) {
       <Dropdown label={className} theme={customTheme} key={`dropdown${index}`}>
         {ClassList.map((className) => {
           return (
-            <Dropdown.Item onClick={() => setClassName(className)}>
+            <Dropdown.Item
+              onClick={() => setClassName(className)}
+              key={`classSelect${index}`}
+            >
               {className}
             </Dropdown.Item>
           );
