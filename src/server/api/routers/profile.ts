@@ -1,27 +1,43 @@
-import z from "zod";
-import { ClassPreferenceValidator } from "~/utils/zodValidations";
+import { wowPrefernceValidator } from "~/utils/zodValidations";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const profileRouter = createTRPCRouter({
-  getUserProfile: protectedProcedure
-    .input(z.object({ userId: z.string().cuid() }))
-    .query(({ input, ctx }) => {
-      return ctx.db.wowPreferences.findUnique({
-        where: { userId: input.userId },
-        include: { classPreferences: true },
-      });
-    }),
+  getUserProfile: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.wowPreferences.findUnique({
+      where: { userId: ctx.session.user.id },
+      include: { classPreferences: true },
+    });
+  }),
 
-  //TODO refactor to go off of WowPreferences, based on use
   updateWowPreferances: protectedProcedure
-    .input(ClassPreferenceValidator)
+    .input(wowPrefernceValidator)
     .mutation(({ input, ctx }) => {
-      return input.classPreferances.forEach((pref) => {
-        ctx.db.classPreferences.upsert({
-          where: { id: pref.id },
-          create: { ...pref },
-          update: { ...pref },
-        });
+      console.log(
+        `upserting with input: \r\n${JSON.stringify(
+          input,
+          null,
+          2,
+        )} \r\n and userid: ${ctx.session.user.id}`,
+      );
+      return ctx.db.wowPreferences.upsert({
+        where: { id: input.id },
+        create: {
+          userId: ctx.session.user.id,
+          classPreferences: {
+            createMany: {
+              data: input.classPrefernces,
+            },
+          },
+        },
+        update: input,
       });
+      // return ctx.db.wowPreferences.create({
+      //   data: {
+      //     classPreferences: {
+      //       createMany: { data: input.classPrefernces },
+      //     },
+      //     userId: ctx.session.user.id,
+      //   },
+      // });
     }),
 });

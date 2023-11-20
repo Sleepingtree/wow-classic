@@ -1,5 +1,4 @@
 import { Button } from "flowbite-react";
-import { useSession } from "next-auth/react";
 import { useContext } from "react";
 import ClassRow from "~/componets/editProfile/classRow";
 import {
@@ -8,43 +7,37 @@ import {
 } from "~/componets/editProfile/editProfileContext";
 import PlusSVG from "~/componets/plusSvg";
 import { ClassName, Role } from "~/constants/logicConstants";
-import Home from "~/pages";
 import { api } from "~/utils/api";
+import { filterZodTypedArray } from "~/utils/typeUtil";
+import { classPreferenceValidator } from "~/utils/zodValidations";
 
 export default function EditProfile() {
-  const { data: sessionData } = useSession();
-  if (!sessionData) {
-    return <Home />;
-  }
-
-  const wowPreferances = api.profile.getUserProfile.useQuery(
-    {
-      userId: sessionData.user.id,
-    },
-    { enabled: !!sessionData.user.id },
-  );
   return (
     <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FFF569] to-[#bfcc76]">
       <div className="flex">
         <EditProfileContextProvider>
-          {wowPreferances.data ? (
-            <InnerForm wowPreferanceId={wowPreferances.data.id} />
-          ) : (
-            ""
-          )}
+          <InnerForm />
         </EditProfileContextProvider>
       </div>
     </main>
   );
 }
 
-function InnerForm({ wowPreferanceId }: { wowPreferanceId: string }) {
+function InnerForm() {
   const updatePreferances = api.profile.updateWowPreferances.useMutation();
 
+  const userProfile = api.profile.getUserProfile.useQuery();
   const { classPerferances, setClassPerferances } =
     useContext(EditProfileContext);
-
-  console.log(`inner form render ${classPerferances}`);
+  if (userProfile.data?.classPreferences)
+    setClassPerferances(userProfile.data.classPreferences);
+  console.log(
+    `inner form render ${JSON.stringify(
+      userProfile.data?.classPreferences,
+      null,
+      2,
+    )}`,
+  );
 
   const updateRolePref = (index: number, roles: Role[]) => {
     const oldItem = classPerferances[index];
@@ -123,16 +116,30 @@ function InnerForm({ wowPreferanceId }: { wowPreferanceId: string }) {
         })
       )}
       <Button
-        onClick={() =>
+        onClick={() => {
+          console.log(
+            `sending mutate with prefs ${JSON.stringify(
+              classPerferances,
+              null,
+              2,
+            )}`,
+          );
           updatePreferances.mutate({
-            classPreferances: classPerferances.map((pref) => ({
-              roles: pref.roles,
-              rank: pref.rank,
-              className: pref.className as ClassName,
-              wowPreferencesId: wowPreferanceId,
-            })),
-          })
-        }
+            classPrefernces: filterZodTypedArray(
+              classPerferances,
+              classPreferenceValidator,
+            )
+              .map((pref) => {
+                console.log(`after filter ${JSON.stringify(pref, null, 2)}`);
+                return pref;
+              })
+              .map((pref) => ({
+                roles: pref.roles,
+                rank: pref.rank,
+                className: pref.className,
+              })),
+          });
+        }}
       />
     </div>
   );

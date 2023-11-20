@@ -2,7 +2,6 @@ import { Session } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import PushToEdit from "~/componets/pushToEdit";
 
 import { api } from "~/utils/api";
 
@@ -45,7 +44,6 @@ export default function Home() {
               </div>
             </Link>
           </div>
-          {sessionData ? <PushToEdit session={sessionData} /> : undefined}
           <div className="flex flex-col items-center gap-2">
             <AuthShowcase sessionData={sessionData} />
           </div>
@@ -61,11 +59,20 @@ function AuthShowcase({ sessionData }: { sessionData: Session | null }) {
     { enabled: sessionData?.user !== undefined },
   );
 
+  const userProfile = api.profile.getUserProfile.useQuery();
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
+        <div>
+          {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+          {secretMessage && <span> - {secretMessage}</span>}
+        </div>
+        <div>
+          {userProfile.data
+            ? JSON.stringify(userProfile.data, null, 2)
+            : "no profile"}
+        </div>
       </p>
       <button
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"

@@ -1,5 +1,5 @@
-import InputSelect from "../inputSelect";
 import { Role, RoleList } from "~/constants/logicConstants";
+import InputSelect from "../inputSelect";
 
 type Props = {
   roles: Role[];
@@ -8,6 +8,7 @@ type Props = {
 
 export default function RoleSelect({ roles, setRoles }: Props) {
   const handleToggle = (role: Role, value: boolean) => {
+    console.log(`in onclick with role: ${role}, and value: ${value}`);
     value
       ? setRoles([...roles, role])
       : setRoles(roles.filter((inner) => inner !== role));
@@ -20,7 +21,7 @@ export default function RoleSelect({ roles, setRoles }: Props) {
           <InputSelect
             displayText={role}
             key={role}
-            selected={true}
+            selected={false}
             setSelected={(value) => handleToggle(role, value)}
           />
         );
