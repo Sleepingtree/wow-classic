@@ -2,6 +2,12 @@
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
+## SetUP WIP
+- run `yarn` to install dependices
+- create/run a postgress instace locally or via docker
+- create a new discord application [here](https://discord.com/developers/applications) or [see t3 guide for more info](https://create.t3.gg/en/usage/next-auth#setting-up-the-default-discordprovider)
+- add a `.env` file to add the postgressURL as `DATABASE_URL`, discord client id as `DISCORD_CLIENT_ID` and the secret key as `DISCORD_CLIENT_SECRET`
+
 ## What's next? How do I make an app with this?
 
 We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
