@@ -125,6 +125,7 @@ function InnerForm() {
             )}`,
           );
           updatePreferances.mutate({
+            id: userProfile.data?.id,
             classPrefernces: filterZodTypedArray(
               classPerferances,
               classPreferenceValidator,
@@ -137,6 +138,7 @@ function InnerForm() {
                 roles: pref.roles,
                 rank: pref.rank,
                 className: pref.className,
+                wowPreferencesId: pref.wowPreferencesId,
               })),
           });
         }}

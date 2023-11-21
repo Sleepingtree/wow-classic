@@ -21,7 +21,7 @@ export default function RoleSelect({ roles, setRoles }: Props) {
           <InputSelect
             displayText={role}
             key={role}
-            selected={false}
+            selected={roles.includes(role)}
             setSelected={(value) => handleToggle(role, value)}
           />
         );
