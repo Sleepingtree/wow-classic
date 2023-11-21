@@ -23,22 +23,14 @@ export const profileRouter = createTRPCRouter({
       return ctx.db.$transaction(async (tx) => {
         //save wow prefs
         const wowPref = await tx.wowPreferences.upsert({
-          where: { id: input.id },
+          where: { userId: ctx.session.user.id },
           create: {
             userId: ctx.session.user.id,
-            classPreferences: {
-              createMany: {
-                data: input.classPrefernces.map((classPref) => ({
-                  ...classPref,
-                  wowPreferencesId: undefined,
-                })),
-              },
-            },
           },
           update: { userId: ctx.session.user.id },
         });
         //delete old class prefs
-        await tx.classPreferences.deleteMany({
+        const other = await tx.classPreferences.deleteMany({
           where: {
             AND: [
               { wowPreferencesId: input.id },
@@ -53,9 +45,9 @@ export const profileRouter = createTRPCRouter({
           },
         });
         //upsert new class prefs
-        input.classPrefernces.forEach((pref) => {
+        input.classPrefernces.forEach(async (pref) => {
           console.log(`upserting with pref ${JSON.stringify(pref, null, 2)}`);
-          tx.classPreferences.upsert({
+          await tx.classPreferences.upsert({
             where: { id: pref.id },
             create: { ...pref, wowPreferencesId: wowPref.id },
             update: pref,

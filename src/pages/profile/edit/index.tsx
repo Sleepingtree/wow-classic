@@ -29,7 +29,10 @@ function InnerForm() {
   const userProfile = api.profile.getUserProfile.useQuery();
   const { classPerferances, setClassPerferances } =
     useContext(EditProfileContext);
-  if (userProfile.data?.classPreferences)
+  if (
+    userProfile.data?.classPreferences &&
+    userProfile.data.classPreferences.length > 0
+  )
     setClassPerferances(userProfile.data.classPreferences);
   console.log(
     `inner form render ${JSON.stringify(
