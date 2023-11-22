@@ -7,7 +7,7 @@ type Props = {
   index: number;
   roles: Role[];
   setRoles: (roles: Role[]) => void;
-  className: ClassName | "Class";
+  className?: ClassName;
   setClassName: (className: ClassName) => void;
   isLast: boolean;
   onDeleteClicked?: () => void;

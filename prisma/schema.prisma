@@ -61,10 +61,11 @@ model VerificationToken {
 }
 
 model WowPreferences {
-    id               String             @id @default(cuid())
-    User             User               @relation(fields: [userId], references: [id])
-    userId           String             @unique
-    classPreferences ClassPreferences[]
+    id                 String               @id @default(cuid())
+    User               User                 @relation(fields: [userId], references: [id])
+    userId             String               @unique
+    classPreferences   ClassPreferences[]
+    discordPreferences DiscodNotificaions[]
 }
 
 model ClassPreferences {
@@ -92,4 +93,11 @@ enum Class {
     Shaman
     Warlock
     Warrior
+}
+
+enum DiscodNotificaions {
+    All_Notifications
+    Discord_Role
+    Server_Faction
+    LFG_Dungeon
 }

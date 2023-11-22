@@ -1,10 +1,8 @@
-import { Button } from "flowbite-react";
-import { useContext } from "react";
+import { ClassPreferences, WowPreferences } from "@prisma/client";
+import { Button, Checkbox, Label, RangeSlider } from "flowbite-react";
+import { useEffect, useState } from "react";
 import ClassRow from "~/componets/editProfile/classRow";
-import {
-  EditProfileContext,
-  EditProfileContextProvider,
-} from "~/componets/editProfile/editProfileContext";
+
 import PlusSVG from "~/componets/plusSvg";
 import { ClassName, Role } from "~/constants/logicConstants";
 import { api } from "~/utils/api";
@@ -12,35 +10,46 @@ import { filterZodTypedArray } from "~/utils/typeUtil";
 import { classPreferenceValidator } from "~/utils/zodValidations";
 
 export default function EditProfile() {
+  const userProfile = api.profile.getUserProfile.useQuery();
   return (
     <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FFF569] to-[#bfcc76]">
-      <div className="flex">
-        <EditProfileContextProvider>
-          <InnerForm />
-        </EditProfileContextProvider>
-      </div>
+      <InnerForm userProfile={userProfile.data} />
     </main>
   );
 }
 
-function InnerForm() {
+function InnerForm({
+  userProfile,
+}: {
+  userProfile:
+    | (WowPreferences & { classPreferences: Partial<ClassPreferences>[] })
+    | undefined
+    | null;
+}) {
   const updatePreferances = api.profile.updateWowPreferances.useMutation();
 
-  const userProfile = api.profile.getUserProfile.useQuery();
-  const { classPerferances, setClassPerferances } =
-    useContext(EditProfileContext);
-  if (
-    userProfile.data?.classPreferences &&
-    userProfile.data.classPreferences.length > 0
-  )
-    setClassPerferances(userProfile.data.classPreferences);
-  console.log(
-    `inner form render ${JSON.stringify(
-      userProfile.data?.classPreferences,
-      null,
-      2,
-    )}`,
+  const [classPerferances, setClassPerferances] = useState(
+    userProfile?.classPreferences ?? [],
   );
+
+  useEffect(() => {
+    setClassPerferances(userProfile?.classPreferences ?? []);
+  }, [userProfile?.classPreferences]);
+
+  const [sodLikelyToPlay, setSodLikelyToPlay] = useState(50);
+
+  //TODO update
+  useEffect(() => {
+    setSodLikelyToPlay(50);
+  }, [userProfile]);
+
+  const [factionPreferance, setFactionPreferance] = useState(50);
+
+  useEffect(() => {
+    setFactionPreferance(50);
+  }, []);
+
+  const [discordNotificaitons, setDiscordNotifications] = useState([]);
 
   const updateRolePref = (index: number, roles: Role[]) => {
     const oldItem = classPerferances[index];
@@ -66,12 +75,20 @@ function InnerForm() {
     <PlusSVG
       onClick={() => {
         console.log("clicking");
-        setClassPerferances([
+        const newPrefs = [
           ...classPerferances,
           {
             rank: classPerferances.length + 1,
             roles: [],
             className: "Class",
+          },
+        ];
+        console.log(`new prefs  ${JSON.stringify(newPrefs, null, 2)}`);
+        setClassPerferances([
+          ...classPerferances,
+          {
+            rank: classPerferances.length + 1,
+            roles: [],
           },
         ]);
       }}
@@ -79,16 +96,69 @@ function InnerForm() {
   );
 
   return (
-    <div className="flex-col space-y-2">
+    <div className="flex flex-col items-center space-y-2 ">
+      <div className="mb-1 block w-full">
+        <Label
+          htmlFor="default-range"
+          value="How likey are you to play Season of Discovery (SOD)"
+          className="text-lg"
+        />
+        <RangeSlider
+          className="w-full"
+          id="default-range"
+          value={sodLikelyToPlay}
+          onChange={(e) => setSodLikelyToPlay(Number(e.target.value))}
+        />
+        <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+          <span>Lol I just clicked this site cus you linked it</span>
+          <span>yes</span>
+        </div>
+      </div>
+      <div className="mb-1 block w-full">
+        <Label
+          htmlFor="default-range"
+          value="Which faction do you want to play"
+          className="text-lg"
+        />
+        <RangeSlider
+          className="w-full"
+          id="default-range"
+          value={factionPreferance}
+          onChange={(e) => setFactionPreferance(Number(e.target.value))}
+        />
+        <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+          <span>lok'tar ogar</span>
+          <span>lol w/e</span>
+          <span>For the Alliance</span>
+        </div>
+      </div>
+      <div className="mb-1 block w-full">
+        <Label
+          htmlFor="default-range"
+          value="What discord notifications do you want?"
+          className="text-lg"
+        />
+        <div className="ml-4">
+          <div className="text-sm">
+            All notifications
+            <Checkbox />
+          </div>
+          <div className="text-sm">
+            What server/faction we are playing on
+            <Checkbox />
+          </div>
+          <div className="text-sm">
+            LFG for dungions/raids
+            <Checkbox />
+          </div>
+        </div>
+      </div>
       {classPerferances.length === 0 ? (
         <div className="flex">
           <ClassRow
             index={0}
             roles={[]}
-            className={"Class"}
-            setRoles={(roles) =>
-              setClassPerferances([{ rank: 1, roles, className: "Class" }])
-            }
+            setRoles={(roles) => setClassPerferances([{ rank: 1, roles }])}
             setClassName={(className) =>
               setClassPerferances([{ rank: 1, roles: [], className }])
             }
@@ -102,7 +172,7 @@ function InnerForm() {
             <div className="flex">
               <ClassRow
                 index={index}
-                roles={pref.roles}
+                roles={pref.roles ?? []}
                 className={pref.className}
                 setRoles={(roles) => updateRolePref(index, roles)}
                 setClassName={(className) => updateClassName(index, className)}
@@ -128,7 +198,9 @@ function InnerForm() {
             )}`,
           );
           updatePreferances.mutate({
-            id: userProfile.data?.id,
+            id: userProfile?.id,
+            sodLikelyToPlay,
+            discordPreferances: [],
             classPrefernces: filterZodTypedArray(
               classPerferances,
               classPreferenceValidator,
@@ -145,7 +217,9 @@ function InnerForm() {
               })),
           });
         }}
-      />
+      >
+        Save
+      </Button>
     </div>
   );
 }

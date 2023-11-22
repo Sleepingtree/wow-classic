@@ -1,4 +1,3 @@
-import { nullishPredicate } from "~/utils/typeUtil";
 import { wowPrefernceValidator } from "~/utils/zodValidations";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -30,28 +29,17 @@ export const profileRouter = createTRPCRouter({
           update: { userId: ctx.session.user.id },
         });
         //delete old class prefs
-        const other = await tx.classPreferences.deleteMany({
+        await tx.classPreferences.deleteMany({
           where: {
-            AND: [
-              { wowPreferencesId: input.id },
-              {
-                id: {
-                  notIn: input.classPrefernces
-                    .map((pref) => pref.id)
-                    .filter(nullishPredicate),
-                },
-              },
-            ],
+            wowPreferencesId: input.id,
           },
         });
-        //upsert new class prefs
-        input.classPrefernces.forEach(async (pref) => {
-          console.log(`upserting with pref ${JSON.stringify(pref, null, 2)}`);
-          await tx.classPreferences.upsert({
-            where: { id: pref.id },
-            create: { ...pref, wowPreferencesId: wowPref.id },
-            update: pref,
-          });
+        //bulk insert
+        await tx.classPreferences.createMany({
+          data: input.classPrefernces.map((pref) => ({
+            ...pref,
+            wowPreferencesId: wowPref.id,
+          })),
         });
       });
     }),
