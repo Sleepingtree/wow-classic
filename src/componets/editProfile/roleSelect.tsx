@@ -23,6 +23,7 @@ export default function RoleSelect({ roles, setRoles }: Props) {
             key={role}
             selected={roles.includes(role)}
             setSelected={(value) => handleToggle(role, value)}
+            className="text-2xl"
           />
         );
       })}

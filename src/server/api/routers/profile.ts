@@ -25,8 +25,16 @@ export const profileRouter = createTRPCRouter({
           where: { userId: ctx.session.user.id },
           create: {
             userId: ctx.session.user.id,
+            factionPreferance: input.factionPreferance,
+            sodLikelyToPlay: input.sodLikelyToPlay,
+            discordPreferences: input.discordPreferances,
           },
-          update: { userId: ctx.session.user.id },
+          update: {
+            userId: ctx.session.user.id,
+            factionPreferance: input.factionPreferance,
+            sodLikelyToPlay: input.sodLikelyToPlay,
+            discordPreferences: input.discordPreferances,
+          },
         });
         //delete old class prefs
         await tx.classPreferences.deleteMany({

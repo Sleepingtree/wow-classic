@@ -64,6 +64,8 @@ model WowPreferences {
     id                 String               @id @default(cuid())
     User               User                 @relation(fields: [userId], references: [id])
     userId             String               @unique
+    factionPreferance  Int
+    sodLikelyToPlay    Int
     classPreferences   ClassPreferences[]
     discordPreferences DiscodNotificaions[]
 }

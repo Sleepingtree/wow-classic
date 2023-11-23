@@ -14,12 +14,12 @@ export const ClassList = [
 ] as const;
 export type ClassName = (typeof ClassList)[number];
 
-export const DiscordPrefernces = new Map<DiscordPrefernceKey, string>([
+export const DiscordPrefernces = new Map<DiscordPrefernceKeyType, string>([
   ["Discord_Role", "I just want to see the channel"],
   ["All_Notifications", "All notifications"],
   ["Server_Faction", "What server/faction we are playing on"],
   ["LFG_Dungeon", "LFG for dungions/raids"],
-]) as ReadonlyMap<DiscordPrefernceKey, string>;
+]) as ReadonlyMap<DiscordPrefernceKeyType, string>;
 
 export const DiscordPrefernceKeys = [
   "Discord_Role",
@@ -28,4 +28,4 @@ export const DiscordPrefernceKeys = [
   "LFG_Dungeon",
 ] as const;
 
-export type DiscordPrefernceKey = (typeof DiscordPrefernceKeys)[number];
+export type DiscordPrefernceKeyType = (typeof DiscordPrefernceKeys)[number];

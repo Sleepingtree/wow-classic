@@ -1,10 +1,15 @@
 import { ClassPreferences, WowPreferences } from "@prisma/client";
-import { Button, Checkbox, Label, RangeSlider } from "flowbite-react";
+import { Button, Label, RangeSlider } from "flowbite-react";
 import { useEffect, useState } from "react";
 import ClassRow from "~/componets/editProfile/classRow";
+import DiscordPrefernceView from "~/componets/editProfile/discordPerfenecesView";
 
 import PlusSVG from "~/componets/plusSvg";
-import { ClassName, Role } from "~/constants/logicConstants";
+import {
+  ClassName,
+  DiscordPrefernceKeyType,
+  Role,
+} from "~/constants/logicConstants";
 import { api } from "~/utils/api";
 import { filterZodTypedArray } from "~/utils/typeUtil";
 import { classPreferenceValidator } from "~/utils/zodValidations";
@@ -40,16 +45,20 @@ function InnerForm({
 
   //TODO update
   useEffect(() => {
-    setSodLikelyToPlay(50);
-  }, [userProfile]);
+    setSodLikelyToPlay(userProfile?.sodLikelyToPlay ?? 50);
+  }, [userProfile?.sodLikelyToPlay]);
 
   const [factionPreferance, setFactionPreferance] = useState(50);
 
   useEffect(() => {
-    setFactionPreferance(50);
-  }, []);
+    setFactionPreferance(userProfile?.factionPreferance ?? 50);
+  }, [userProfile?.factionPreferance]);
 
-  const [discordNotificaitons, setDiscordNotifications] = useState([]);
+  const [discordKeys, setDiscordKeys] = useState<DiscordPrefernceKeyType[]>([]);
+
+  useEffect(() => {
+    setDiscordKeys(userProfile?.discordPreferences ?? []);
+  }, [userProfile?.discordPreferences]);
 
   const updateRolePref = (index: number, roles: Role[]) => {
     const oldItem = classPerferances[index];
@@ -138,20 +147,10 @@ function InnerForm({
           value="What discord notifications do you want?"
           className="text-lg"
         />
-        <div className="ml-4">
-          <div className="text-sm">
-            All notifications
-            <Checkbox />
-          </div>
-          <div className="text-sm">
-            What server/faction we are playing on
-            <Checkbox />
-          </div>
-          <div className="text-sm">
-            LFG for dungions/raids
-            <Checkbox />
-          </div>
-        </div>
+        <DiscordPrefernceView
+          discordKeys={discordKeys}
+          setDiscordKeys={setDiscordKeys}
+        />
       </div>
       {classPerferances.length === 0 ? (
         <div className="flex">
@@ -200,7 +199,8 @@ function InnerForm({
           updatePreferances.mutate({
             id: userProfile?.id,
             sodLikelyToPlay,
-            discordPreferances: [],
+            factionPreferance,
+            discordPreferances: discordKeys,
             classPrefernces: filterZodTypedArray(
               classPerferances,
               classPreferenceValidator,

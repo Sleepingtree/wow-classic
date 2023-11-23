@@ -19,5 +19,6 @@ export const wowPrefernceValidator = z.object({
   id: z.string().cuid().optional(),
   discordPreferances: discordPrefence.array(),
   sodLikelyToPlay: z.number().int().min(0).max(100),
+  factionPreferance: z.number().int().min(0).max(100),
   classPrefernces: classPreferenceValidator.array().min(1),
 });
