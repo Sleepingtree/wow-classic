@@ -1,5 +1,6 @@
 import { wowPrefernceValidator } from "~/utils/zodValidations";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { z } from "zod";
 
 export const profileRouter = createTRPCRouter({
   getUserProfile: protectedProcedure.query(({ ctx }) => {
@@ -8,6 +9,37 @@ export const profileRouter = createTRPCRouter({
       include: { classPreferences: true },
     });
   }),
+
+  getSignedUpUsers: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const take = input.limit ? input.limit + 1 : 50;
+      const items = await ctx.db.wowPreferences.findMany({
+        take,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+        orderBy: {
+          id: "asc",
+        },
+        include: {
+          User: { select: { name: true, image: true } },
+          classPreferences: true,
+        },
+      });
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > take - 1) {
+        const nextItem = items.pop();
+        nextCursor = nextItem?.id;
+      }
+      return {
+        items,
+        nextCursor,
+      };
+    }),
 
   updateWowPreferances: protectedProcedure
     .input(wowPrefernceValidator)

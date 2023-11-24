@@ -15,7 +15,7 @@ export default function RoleSelect({ roles, setRoles }: Props) {
   };
 
   return (
-    <div className="flex ">
+    <div className="flex items-center justify-center">
       {RoleList.map((role) => {
         return (
           <InputSelect

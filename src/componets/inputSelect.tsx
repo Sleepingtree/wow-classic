@@ -18,9 +18,7 @@ export default function InputSelect({
   console.log(`got props ${selected} text ${displayText}`);
   return (
     <div
-      className={
-        (className ? className + " " : "") + "mb-4 flex items-center pr-2"
-      }
+      className={(className ? className + " " : "") + "flex items-center pr-2"}
       key={key}
     >
       <Checkbox checked={selected} onChange={() => setSelected(!selected)} />
