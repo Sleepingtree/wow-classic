@@ -180,6 +180,9 @@ function InnerForm({
             setDiscordKeys={setDiscordKeys}
           />
         </div>
+        <div className="tx-lg font-medium">
+          What class(s) do you want to play most to least likely
+        </div>
         {classPerferances.length === 0 ? (
           <div className="flex">
             <ClassRow
@@ -196,7 +199,7 @@ function InnerForm({
         ) : (
           classPerferances.map((pref, index) => {
             return (
-              <div className="flex items-end justify-center">
+              <div className="flex items-center justify-center">
                 <ClassRow
                   index={index}
                   roles={pref.roles ?? []}
