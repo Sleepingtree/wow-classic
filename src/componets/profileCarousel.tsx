@@ -23,7 +23,7 @@ export default function ProfileCarousel() {
   const toShow = signedUpUsers?.pages[page]?.items;
 
   return (
-    <div>
+    <>
       {toShow
         ? toShow.map((item, index) => (
             <ProfileBaseballCard
@@ -32,6 +32,6 @@ export default function ProfileCarousel() {
             />
           ))
         : "Loading"}
-    </div>
+    </>
   );
 }

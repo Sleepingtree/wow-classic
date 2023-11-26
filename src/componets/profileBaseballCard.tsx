@@ -9,19 +9,37 @@ type Props = {
 };
 
 export default function ProfileBaseballCard({ prefernces }: Props) {
+  let image: string | undefined;
+  switch (true) {
+    case prefernces.factionPreferance < 25:
+      image = "horde.png";
+      break;
+    case prefernces.factionPreferance > 75:
+      image = "ally.png";
+      break;
+  }
   return (
     <div>
       <div>
         <Link
-          className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white"
+          className="flex max-w-md flex-col gap-4 rounded-xl bg-white/10 p-4 text-white"
           href="/profile/edit"
           target="_blank"
         >
-          <div className="flex justify-start space-x-2">
+          <div className="flex flex-wrap justify-start space-x-2">
             <Avatar img={prefernces.User.image ?? undefined} />
             <h5 className="text-2xl font-bold tracking-tight">
               {prefernces.User.name}
             </h5>
+            {image ? (
+              <img
+                src={image}
+                className={`h-10 rounded-lg bg-black`}
+                alt="horde logo"
+              />
+            ) : (
+              ""
+            )}
           </div>
           <p className="font-normal ">
             {prefernces.classPreferences?.map((pref, index) => {
