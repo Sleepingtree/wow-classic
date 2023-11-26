@@ -98,7 +98,6 @@ enum Class {
 }
 
 enum DiscodNotificaions {
-    All_Notifications
     Discord_Role
     Server_Faction
     LFG_Dungeon

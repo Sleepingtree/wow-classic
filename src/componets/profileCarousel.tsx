@@ -21,6 +21,7 @@ export default function ProfileCarousel() {
   };
   // data will be split in pages
   const toShow = signedUpUsers?.pages[page]?.items;
+
   return (
     <div>
       {toShow

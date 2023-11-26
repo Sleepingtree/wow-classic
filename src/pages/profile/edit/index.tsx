@@ -1,9 +1,12 @@
 import { ClassPreferences, WowPreferences } from "@prisma/client";
 import { Button, Label, RangeSlider, Toast } from "flowbite-react";
+import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { HiCheck, HiPlus, HiX } from "react-icons/hi";
 import ClassRow from "~/componets/editProfile/classRow";
 import DiscordPrefernceView from "~/componets/editProfile/discordPerfenecesView";
-import PlusSVG from "~/componets/plusSvg";
+import Header from "~/componets/header";
 import {
   ClassName,
   DiscordPrefernceKeyType,
@@ -12,14 +15,21 @@ import {
 import { api } from "~/utils/api";
 import { filterZodTypedArray } from "~/utils/typeUtil";
 import { classPreferenceValidator } from "~/utils/zodValidations";
-import { HiCheck, HiX } from "react-icons/hi";
 
 export default function EditProfile() {
   const userProfile = api.profile.getUserProfile.useQuery();
   return (
-    <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FFF569] to-[#bfcc76]">
-      <InnerForm userProfile={userProfile.data} />
-    </main>
+    <>
+      <Head>
+        <title>Edit Profile</title>
+        <meta name="description" content="Edit the users profile" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Header />
+      <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#63536f] to-[#15162c]">
+        <InnerForm userProfile={userProfile.data} />
+      </main>
+    </>
   );
 }
 
@@ -32,6 +42,13 @@ function InnerForm({
     | null;
 }) {
   const updatePreferances = api.profile.updateWowPreferances.useMutation();
+  const router = useRouter();
+
+  if (updatePreferances.isSuccess) {
+    setTimeout(() => {
+      router.push("/");
+    }, 100);
+  }
 
   const [classPerferances, setClassPerferances] = useState(
     userProfile?.classPreferences ?? [],
@@ -107,38 +124,42 @@ function InnerForm({
   };
 
   const plusSvg = (
-    <PlusSVG
-      onClick={() => {
-        console.log("clicking");
-        const newPrefs = [
-          ...classPerferances,
-          {
-            rank: classPerferances.length + 1,
-            roles: [],
-            className: "Class",
-          },
-        ];
-        console.log(`new prefs  ${JSON.stringify(newPrefs, null, 2)}`);
-        setClassPerferances([
-          ...classPerferances,
-          {
-            rank: classPerferances.length + 1,
-            roles: [],
-          },
-        ]);
-      }}
-    />
+    <>
+      <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+        <HiPlus
+          onClick={() => {
+            console.log("clicking");
+            const newPrefs = [
+              ...classPerferances,
+              {
+                rank: classPerferances.length + 1,
+                roles: [],
+                className: "Class",
+              },
+            ];
+            console.log(`new prefs  ${JSON.stringify(newPrefs, null, 2)}`);
+            setClassPerferances([
+              ...classPerferances,
+              {
+                rank: classPerferances.length + 1,
+                roles: [],
+              },
+            ]);
+          }}
+        />
+      </div>
+    </>
   );
 
   return (
     <>
-      <div className="flex flex-col items-center space-y-2 ">
+      <div className="flex flex-col items-center space-y-2  text-purple-200 dark:text-white">
         <h1 className="mb-5 text-5xl">WoW preferance profile</h1>
         <div className="mb-1 block w-full">
           <Label
             htmlFor="default-range"
             value="How likey are you to play Season of Discovery (SOD)"
-            className="text-lg"
+            className="text-lg  text-purple-200"
           />
           <RangeSlider
             className="w-full"
@@ -155,7 +176,7 @@ function InnerForm({
           <Label
             htmlFor="default-range"
             value="Which faction do you want to play"
-            className="text-lg"
+            className="text-lg  text-purple-200"
           />
           <RangeSlider
             className="w-full"
@@ -173,18 +194,18 @@ function InnerForm({
           <Label
             htmlFor="default-range"
             value="What discord notifications do you want?"
-            className="text-lg"
+            className="text-lg  text-purple-200"
           />
           <DiscordPrefernceView
             discordKeys={discordKeys}
             setDiscordKeys={setDiscordKeys}
           />
         </div>
-        <div className="tx-lg font-medium">
+        <div className="tx-lg self-start font-medium">
           What class(s) do you want to play most to least likely
         </div>
         {classPerferances.length === 0 ? (
-          <div className="flex">
+          <div className="flex items-center">
             <ClassRow
               index={0}
               roles={[]}
