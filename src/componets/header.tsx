@@ -13,7 +13,7 @@ export default function Header() {
           className="mr-3 h-6 sm:h-9"
           alt="Sleepingtree  Logo"
         />
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+        <span className="self-center whitespace-nowrap text-xl font-semibold text-purple-100">
           Season of Discory Sign up page
         </span>
       </Navbar.Brand>
@@ -48,6 +48,15 @@ export default function Header() {
         </Dropdown>
         <Navbar.Toggle />
       </div>
+      <Navbar.Collapse>
+        <Navbar.Link
+          href="https://discord.gg/5KMGGTMUSy"
+          className="text-purple-100"
+          target="_blank"
+        >
+          Join the Discord
+        </Navbar.Link>
+      </Navbar.Collapse>
     </Navbar>
   );
 }
