@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { ClassName, Role } from "~/constants/logicConstants";
 type ClassPerferance = {
   rank: number;
@@ -11,7 +11,9 @@ export type EditProfileContextProps = {
 };
 export const EditProfileContext = createContext<EditProfileContextProps>({
   classPerferances: [], // set a default value
-  setClassPerferances(classPerferances) {},
+  setClassPerferances: (_classPerferances) => {
+    return null;
+  },
 });
 
 export function EditProfileContextProvider({
