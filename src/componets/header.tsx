@@ -2,8 +2,6 @@ import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 
-type Props = {};
-
 export default function Header() {
   const { data: sessionData } = useSession();
   const userProfile = api.profile.getUserProfile.useQuery();

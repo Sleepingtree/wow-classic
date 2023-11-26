@@ -24,10 +24,12 @@ export default function ProfileBaseballCard({ prefernces }: Props) {
             </h5>
           </div>
           <p className="font-normal ">
-            {prefernces.classPreferences?.map((pref) => {
+            {prefernces.classPreferences?.map((pref, index) => {
               return (
-                <div>
-                  <span className="mr-2">{pref.className}:</span>
+                <div key={`baseballCard ${index}`}>
+                  <span key={` ${index}`} className="mr-2">
+                    {pref.className}:
+                  </span>
                   {pref.roles.map((role, i, a) =>
                     i === a.length - 1 ? role : role + ", ",
                   )}

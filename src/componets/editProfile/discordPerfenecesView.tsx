@@ -18,7 +18,6 @@ export default function DiscordPrefernceView({
     discordKey: DiscordPrefernceKeyType,
     value: boolean,
   ) => {
-    console.log(`in onclick with role: ${discordKeys}, and value: ${value}`);
     value
       ? setDiscordKeys([...discordKeys, discordKey])
       : setDiscordKeys(discordKeys.filter((inner) => inner !== discordKey));

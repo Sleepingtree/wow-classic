@@ -46,7 +46,7 @@ function InnerForm({
 
   if (updatePreferances.isSuccess) {
     setTimeout(() => {
-      router.push("/");
+      void router.push("/");
     }, 100);
   }
 
@@ -185,7 +185,7 @@ function InnerForm({
             onChange={(e) => setFactionPreferance(Number(e.target.value))}
           />
           <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-            <span>lok'tar ogar</span>
+            <span>lok&apos;tar ogar</span>
             <span>lol w/e</span>
             <span>For the Alliance</span>
           </div>
@@ -220,7 +220,10 @@ function InnerForm({
         ) : (
           classPerferances.map((pref, index) => {
             return (
-              <div className="flex items-center justify-center">
+              <div
+                key={`classPrefMap ${index}`}
+                className="flex items-center justify-center"
+              >
                 <ClassRow
                   index={index}
                   roles={pref.roles ?? []}
