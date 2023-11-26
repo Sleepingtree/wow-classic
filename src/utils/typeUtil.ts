@@ -15,3 +15,7 @@ export const filterZodTypedArray = <T extends ZodFirstPartySchemaTypes>(
     isZodType(item, type),
   );
 };
+
+export const nullishPredicate = <T>(i: T | null | undefined): i is T => {
+  return i !== null && i !== undefined;
+};

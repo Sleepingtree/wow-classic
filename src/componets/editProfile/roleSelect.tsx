@@ -15,14 +15,15 @@ export default function RoleSelect({ roles, setRoles }: Props) {
   };
 
   return (
-    <div className="flex ">
+    <div className="flex items-center justify-center">
       {RoleList.map((role) => {
         return (
           <InputSelect
             displayText={role}
             key={role}
-            selected={false}
+            selected={roles.includes(role)}
             setSelected={(value) => handleToggle(role, value)}
+            className="text-2xl"
           />
         );
       })}
