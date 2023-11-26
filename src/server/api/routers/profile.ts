@@ -71,7 +71,7 @@ export const profileRouter = createTRPCRouter({
         //delete old class prefs
         await tx.classPreferences.deleteMany({
           where: {
-            wowPreferencesId: input.id,
+            wowPreferencesId: wowPref.id,
           },
         });
         //bulk insert
