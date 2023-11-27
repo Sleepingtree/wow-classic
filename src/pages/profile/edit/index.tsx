@@ -154,7 +154,7 @@ function InnerForm({
   return (
     <>
       <div className="flex flex-col items-center space-y-2  text-purple-200 dark:text-white">
-        <h1 className="mb-5 text-5xl">WoW preferance profile</h1>
+        <h1 className="mb-5 text-5xl">WoW preferences profile</h1>
         <div className="mb-1 block w-full">
           <Label
             htmlFor="default-range"
