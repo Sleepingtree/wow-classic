@@ -22,7 +22,7 @@ export default function ProfileCarousel() {
       const hasReachedBottom = offsetHeight - (innerHeight + scrollTop) <= 10;
 
       if (hasReachedBottom) {
-        fetchNextPage();
+        void fetchNextPage();
       }
     };
 
