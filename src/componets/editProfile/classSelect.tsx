@@ -9,12 +9,12 @@ type Props = {
 
 export default function ClassSelect({ className, setClassName, index }: Props) {
   const customTheme: CustomFlowbiteTheme["dropdown"] = {
-    // floating: {
-    //   target: "bg-blue-600",
-    // },
+    floating: {
+      target: "mr-2",
+    },
   };
   return (
-    <div className="mr-4 flex" key={index}>
+    <>
       <Dropdown
         label={className ?? "Class"}
         theme={customTheme}
@@ -31,6 +31,6 @@ export default function ClassSelect({ className, setClassName, index }: Props) {
           );
         })}
       </Dropdown>
-    </div>
+    </>
   );
 }

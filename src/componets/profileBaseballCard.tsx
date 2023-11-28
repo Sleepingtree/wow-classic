@@ -20,7 +20,7 @@ export default function ProfileBaseballCard({ prefernces }: Props) {
   }
   return (
     <div>
-      <div>
+      <div className="max-vw">
         <Link
           className="flex max-w-md flex-col gap-4 rounded-xl bg-white/10 p-4 text-white"
           href="/profile/edit"
@@ -28,7 +28,7 @@ export default function ProfileBaseballCard({ prefernces }: Props) {
         >
           <div className="flex flex-wrap justify-start space-x-2">
             <Avatar img={prefernces.User.image ?? undefined} />
-            <h5 className="text-2xl font-bold tracking-tight">
+            <h5 className="overflow-hidden truncate text-2xl font-bold tracking-tight">
               {prefernces.User.name}
             </h5>
             {image ? (

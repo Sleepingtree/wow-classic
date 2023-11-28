@@ -9,7 +9,6 @@ type Props = {
   setRoles: (roles: Role[]) => void;
   className?: ClassName;
   setClassName: (className: ClassName) => void;
-  isLast: boolean;
   onDeleteClicked?: () => void;
 };
 
@@ -19,11 +18,13 @@ export default function ClassRow({
   setRoles,
   className,
   setClassName,
-  isLast,
   onDeleteClicked,
 }: Props) {
   return (
-    <div className="mr-3 flex items-center justify-center" key={index}>
+    <div
+      className="mr-3 flex flex-wrap items-center justify-center"
+      key={index}
+    >
       <ClassSelect
         className={className}
         setClassName={setClassName}
