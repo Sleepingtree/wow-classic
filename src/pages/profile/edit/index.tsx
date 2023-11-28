@@ -153,7 +153,7 @@ function InnerForm({
 
   return (
     <>
-      <div className="flex flex-col items-center space-y-2  text-purple-200 dark:text-white">
+      <div className="flex w-full flex-col items-center  space-y-2 text-purple-200 dark:text-white md:w-auto">
         <h1 className="mb-5 text-5xl">WoW preferences profile</h1>
         <div className="mb-1 block w-full">
           <Label
@@ -213,7 +213,6 @@ function InnerForm({
               setClassName={(className) =>
                 setClassPerferances([{ rank: 1, roles: [], className }])
               }
-              isLast={true}
             />
             {plusSvg}
           </div>
@@ -232,7 +231,6 @@ function InnerForm({
                   setClassName={(className) =>
                     updateClassName(index, className)
                   }
-                  isLast={index === classPerferances.length - 1}
                   onDeleteClicked={() =>
                     setClassPerferances(
                       classPerferances.filter((_item, i) => i !== index),

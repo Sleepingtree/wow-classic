@@ -15,7 +15,7 @@ export default function RoleSelect({ roles, setRoles }: Props) {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <>
       {RoleList.map((role) => {
         return (
           <InputSelect
@@ -27,6 +27,6 @@ export default function RoleSelect({ roles, setRoles }: Props) {
           />
         );
       })}
-    </div>
+    </>
   );
 }

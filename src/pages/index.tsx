@@ -6,7 +6,7 @@ import ProfileCarousel from "~/componets/profileCarousel";
 
 export default function Home() {
   return (
-    <>
+    <div className="min-w-fit">
       <Head>
         <title>Sleepingtree&apos;s Season of Discvery Prep</title>
         <meta
@@ -16,7 +16,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#63536f] to-[#15162c]">
+      <main className="flex min-h-screen min-w-fit flex-col items-center justify-center bg-gradient-to-b from-[#63536f] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Sleepingtree&apos;s{" "}
@@ -46,6 +46,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 }

@@ -4,7 +4,9 @@ import { api } from "~/utils/api";
 
 export default function Header() {
   const { data: sessionData } = useSession();
-  const userProfile = api.profile.getUserProfile.useQuery();
+  const userProfile = api.profile.getUserProfile.useQuery(undefined, {
+    enabled: !!sessionData?.user,
+  });
   return (
     <Navbar fluid className="bg-gradient-to-b from-[#15162c] to-[#63536f]">
       <Navbar.Brand href="/">
@@ -13,7 +15,7 @@ export default function Header() {
           className="mr-3 h-6 sm:h-9"
           alt="Sleepingtree  Logo"
         />
-        <span className="self-center whitespace-nowrap text-xl font-semibold text-purple-100">
+        <span className="self-center text-xl font-semibold text-purple-100">
           Season of Discory Sign up page
         </span>
       </Navbar.Brand>
@@ -35,7 +37,7 @@ export default function Header() {
             </span>
             <span className="block truncate text-sm font-medium">
               Class:
-              {userProfile.data?.classPreferences &&
+              {userProfile?.data?.classPreferences &&
               userProfile.data.classPreferences.length > 0
                 ? userProfile.data?.classPreferences[0]?.className
                 : "Undecided"}
